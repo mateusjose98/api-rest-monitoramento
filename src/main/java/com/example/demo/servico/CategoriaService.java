@@ -1,0 +1,48 @@
+package com.example.demo.servico;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.entidades.Categoria;
+import com.example.demo.repositorio.CategoriaRepository;
+
+@Service @Transactional
+public class CategoriaService {
+
+	@Autowired
+	private CategoriaRepository categoriaRepository;
+
+	public List<Categoria> listarTodas() {
+		return categoriaRepository.findAll();
+	}
+
+	public Optional<Categoria> buscarPorCodigo(Long codigo) {
+		return categoriaRepository.findById(codigo);
+	}
+
+	public Categoria salver(Categoria categoria) {
+		return categoriaRepository.save(categoria);
+	}
+
+	public Categoria atualizat(Long codigo, Categoria categoria) {
+		Categoria cat = validarCategoria(codigo);
+		cat.setNome(categoria.getNome());
+		return categoriaRepository.save(cat);
+		
+	}
+
+	private Categoria validarCategoria(Long codigo) {
+		return buscarPorCodigo(codigo).orElseThrow( () -> new EmptyResultDataAccessException(1) );
+		
+		
+		
+	}
+	
+	
+}
