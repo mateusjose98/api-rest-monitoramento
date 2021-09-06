@@ -22,12 +22,21 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
 	private static final String CONST_VALIDATION_LENGTH = "Length";
 	private static final String CONST_VALIDATION_NOT_BLANK = "NotBlank";
 	
+	
+	@ExceptionHandler(RegraNegocioException.class)
+	public ResponseEntity<Object> handleRegraNegocioException(RegraNegocioException ex, WebRequest request){
+		String msgUsuario = ex.getMessage();
+		String msgDev = ex.getMessage();
+		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDev));
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	@ExceptionHandler(EmptyResultDataAccessException.class)
 	public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request){
 		String msgUsuario = "Recurso não encontrado";
 		String msgDev = ex.toString();
 		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDev));
-		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 		
 	}
 
