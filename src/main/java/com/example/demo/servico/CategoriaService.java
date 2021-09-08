@@ -52,7 +52,7 @@ public class CategoriaService {
 
 	private void validarCategoriaDuplicada(Categoria categoria) {
 		Categoria cat = categoriaRepository.findByNome(categoria.getNome());
-		if (!Objects.nonNull(cat) || ! cat.getId().equals(categoria.getId())) {
+		if (cat != null && ! cat.getId().equals(categoria.getId())) {
 			throw new RegraNegocioException(String.format("A categoria %s já está cadastrada!", categoria.getNome().toUpperCase()));
 		}
 	}
